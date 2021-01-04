@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
+
 import SigninScreen from './src/screens/SigninScreen';
 import SignupScreen from './src/screens/SignupScreen';
 import MainScreen from './src/screens/MainScreen';
@@ -13,8 +14,26 @@ function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Sign Up">
-        <Stack.Screen name="Sign In" component={SigninScreen} />
-        <Stack.Screen name="Sign Up" component={SignupScreen} />
+        <Stack.Screen
+          name="Sign In"
+          component={SigninScreen}
+          options={{
+            title: 'Sign in',
+            headerStyle: {
+              backgroundColor: '#1ed4f4',
+            },
+          }}
+        />
+        <Stack.Screen
+          name="Sign Up"
+          component={SignupScreen}
+          options={{
+            title: 'Sign up',
+            headerStyle: {
+              backgroundColor: '#1ed4f4',
+            },
+          }}
+        />
         <Stack.Screen name="Main Screen" component={MainScreen} />
         <Stack.Screen name="User Details" component={DetailUserScreen} />
       </Stack.Navigator>
