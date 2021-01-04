@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import createDataContext from './createDataContext';
 import tracker from '../api/tracker';
+import * as NavigationService from '../navigationService/NavigationService';
 
 const authReducer = (state, action) => {
   switch (action.type) {
@@ -20,7 +21,7 @@ const signup = (dispatch) => async ({name, email, password}) => {
     const response = await tracker.post('/signup', {name, email, password});
     await AsyncStorage.setItem('token', response.data.token);
     dispatch({type: 'signin', payload: response.data.token});
-    //navigate to main flow
+    NavigationService.navigate('MainScreen');
   } catch (err) {
     dispatch({
       type: 'add_error',
@@ -34,8 +35,9 @@ const signin = (dispatch) => async ({name, email, password}) => {
     const response = await tracker.post('/signin', {name, email, password});
     await AsyncStorage.setItem('token', response.data.token);
     dispatch({type: 'signin', payload: response.data.token});
-    //navigate to main flow
+    NavigationService.navigate('MainScreen');
   } catch (err) {
+    console.log(err);
     dispatch({
       type: 'add_error',
       payload: 'Something went wrong with sign in',

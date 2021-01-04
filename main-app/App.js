@@ -7,15 +7,28 @@ import SignupScreen from './src/screens/SignupScreen';
 import MainScreen from './src/screens/MainScreen';
 import DetailUserScreen from './src/screens/DetailUserScreen';
 import {Provider as AuthProvider} from './src/context/AuthContext';
+import {Provider as UsersProvider} from './src/context/UsersContext';
+import {navigationRef} from './src/navigationService/NavigationService';
+import {isReadyRef} from './src/navigationService/NavigationService';
 
 const Stack = createStackNavigator();
 
 function App() {
+  React.useEffect(() => {
+    return () => {
+      isReadyRef.current = false;
+    };
+  }, []);
+
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Sign Up">
+    <NavigationContainer
+      ref={navigationRef}
+      onReady={() => {
+        isReadyRef.current = true;
+      }}>
+      <Stack.Navigator initialRouteName="SignUp">
         <Stack.Screen
-          name="Sign In"
+          name="SignIn"
           component={SigninScreen}
           options={{
             title: 'Sign in',
@@ -25,7 +38,7 @@ function App() {
           }}
         />
         <Stack.Screen
-          name="Sign Up"
+          name="SignUp"
           component={SignupScreen}
           options={{
             title: 'Sign up',
@@ -34,8 +47,8 @@ function App() {
             },
           }}
         />
-        <Stack.Screen name="Main Screen" component={MainScreen} />
-        <Stack.Screen name="User Details" component={DetailUserScreen} />
+        <Stack.Screen name="MainScreen" component={MainScreen} />
+        <Stack.Screen name="UserDetails" component={DetailUserScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -43,8 +56,10 @@ function App() {
 
 export default () => {
   return (
-    <AuthProvider>
-      <App />
-    </AuthProvider>
+    <UsersProvider>
+      <AuthProvider>
+        <App />
+      </AuthProvider>
+    </UsersProvider>
   );
 };

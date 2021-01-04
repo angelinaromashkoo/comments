@@ -5,7 +5,7 @@ const User = mongoose.model('User');
 
 const router = express.Router();
 
-//in dao: signup, signin
+
 router.post('/signup', async (req, res) => {
     const {name, email, password} = req.body;
 
@@ -39,6 +39,16 @@ router.post('/signin', async (req, res) => {
     } catch(err) {
         return res.status(422).send({error: 'Invalid password or email'});
     }
+});
+
+router.get('/users', async (req, res) => {
+    const users = await User.find({});
+
+    const userMap = {};
+    users.forEach((user) => {
+        userMap[user.name] = user; //or [user._id]
+    });
+    res.send(userMap);
 });
 
 module.exports = router;
