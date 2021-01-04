@@ -1,11 +1,11 @@
-require('./models/User');
-require('./models/Comment');
+require('./models/user.model');
+require('./models/comment.model');
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const authRoutes = require('./routes/authRoutes');
-const commentRoutes = require('./routes/commentRoutes');
-const requireAuth = require('./middlewares/requireAuth');
+const authRoutes = require('./routes/auth.routes');
+const commentRoutes = require('./routes/comment.routes');
+const requireAuth = require('./middlewares/require.auth');
 
 const app = express();
 
