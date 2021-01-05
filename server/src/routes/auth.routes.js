@@ -49,6 +49,7 @@ router.get('/users', async (req, res) => {
         userMap[user.name] = user; //or [user._id]
     });
     res.send(userMap);
+    console.log(userMap);
 });
 
 module.exports = router;

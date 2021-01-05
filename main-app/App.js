@@ -26,7 +26,7 @@ function App() {
       onReady={() => {
         isReadyRef.current = true;
       }}>
-      <Stack.Navigator initialRouteName="SignUp">
+      <Stack.Navigator initialRouteName="MainScreen">
         <Stack.Screen
           name="SignIn"
           component={SigninScreen}
