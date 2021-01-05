@@ -46,9 +46,6 @@ router.get('/users', async (req, res) => {
 
     const userMap = [];
     userMap.push(users);
-    /*users.forEach((user) => {
-        userMap[user.name] = user; //or [user._id]
-    });*/
     res.send(users);
     console.log(users);
 });
