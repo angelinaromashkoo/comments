@@ -23,9 +23,9 @@ const MainScreen = () => {
           );
         }}
       />
-      {/*<Spacer>
+      <Spacer>
         <Button title="Sign Out" onPress={signout} />
-      </Spacer>*/}
+      </Spacer>
     </View>
   );
 };
