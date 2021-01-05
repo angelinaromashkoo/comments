@@ -7,7 +7,6 @@ import SignupScreen from './src/screens/SignupScreen';
 import MainScreen from './src/screens/MainScreen';
 import DetailUserScreen from './src/screens/DetailUserScreen';
 import {Provider as AuthProvider} from './src/context/AuthContext';
-import {Provider as UsersProvider} from './src/context/UsersContext';
 import {navigationRef} from './src/navigationService/NavigationService';
 import {isReadyRef} from './src/navigationService/NavigationService';
 
@@ -26,7 +25,7 @@ function App() {
       onReady={() => {
         isReadyRef.current = true;
       }}>
-      <Stack.Navigator initialRouteName="MainScreen">
+      <Stack.Navigator initialRouteName="SignIn">
         <Stack.Screen
           name="SignIn"
           component={SigninScreen}
@@ -56,10 +55,8 @@ function App() {
 
 export default () => {
   return (
-    <UsersProvider>
-      <AuthProvider>
-        <App />
-      </AuthProvider>
-    </UsersProvider>
+    <AuthProvider>
+      <App />
+    </AuthProvider>
   );
 };

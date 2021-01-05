@@ -44,12 +44,13 @@ router.post('/signin', async (req, res) => {
 router.get('/users', async (req, res) => {
     const users = await User.find({});
 
-    const userMap = {};
-    users.forEach((user) => {
+    const userMap = [];
+    userMap.push(users);
+    /*users.forEach((user) => {
         userMap[user.name] = user; //or [user._id]
-    });
-    res.send(userMap);
-    console.log(userMap);
+    });*/
+    res.send(users);
+    console.log(users);
 });
 
 module.exports = router;
