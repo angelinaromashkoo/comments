@@ -9,6 +9,10 @@ import * as NavigationService from '../navigationService/NavigationService';
 const SignupScreen = () => {
   const {state, signup} = useContext(AuthContext);
 
+  const onClick = () => {
+    NavigationService.navigate('SignIn');
+  };
+
   return (
     <View style={styles.container}>
       <AuthForm
@@ -16,7 +20,7 @@ const SignupScreen = () => {
         onSubmitButtonText="Sign Up"
         onSubmit={signup}
       />
-      <TouchableOpacity onPress={() => NavigationService.navigate('SignIn')}>
+      <TouchableOpacity onPress={onClick}>
         <Spacer>
           <Text style={styles.link}>
             Already have an account? Sign in instead

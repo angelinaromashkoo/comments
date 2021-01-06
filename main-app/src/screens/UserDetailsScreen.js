@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 
-const UserDetailsScreen = ({navigation, route}) => {
+const UserDetailsScreen = ({route}) => {
   const {comments, id} = route.params;
 
   return (
@@ -11,8 +11,6 @@ const UserDetailsScreen = ({navigation, route}) => {
     </View>
   );
 };
-
-debugger;
 
 const styles = StyleSheet.create({});
 
