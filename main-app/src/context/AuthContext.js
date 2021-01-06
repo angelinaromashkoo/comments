@@ -48,7 +48,7 @@ const signin = (dispatch) => async ({name, email, password}) => {
 const signout = (dispatch) => async () => {
   await AsyncStorage.removeItem('token');
   dispatch({type: 'signout'});
-  //navigate to sign up screen
+  NavigationService.navigate('SignIn');
 };
 
 export const {Provider, Context} = createDataContext(

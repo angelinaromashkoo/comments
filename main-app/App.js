@@ -5,7 +5,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import SigninScreen from './src/screens/SigninScreen';
 import SignupScreen from './src/screens/SignupScreen';
 import MainScreen from './src/screens/MainScreen';
-import DetailUserScreen from './src/screens/DetailUserScreen';
+import UserDetailsScreen from './src/screens/UserDetailsScreen';
 import {Provider as AuthProvider} from './src/context/AuthContext';
 import {navigationRef} from './src/navigationService/NavigationService';
 import {isReadyRef} from './src/navigationService/NavigationService';
@@ -46,8 +46,26 @@ function App() {
             },
           }}
         />
-        <Stack.Screen name="MainScreen" component={MainScreen} />
-        <Stack.Screen name="UserDetails" component={DetailUserScreen} />
+        <Stack.Screen
+          name="MainScreen"
+          component={MainScreen}
+          options={{
+            title: 'Main Screen',
+            headerStyle: {
+              backgroundColor: '#8b55ee',
+            },
+          }}
+        />
+        <Stack.Screen
+          name="UserDetails"
+          component={UserDetailsScreen}
+          options={{
+            title: 'User Details',
+            headerStyle: {
+              backgroundColor: '#c140ff',
+            },
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -1,20 +1,15 @@
 import React, {useState, useEffect, useContext, useCallback} from 'react';
-import {
-  StyleSheet,
-  FlatList,
-  TouchableOpacity,
-  View,
-  Text,
-  ScrollView,
-} from 'react-native';
-import {Button, ListItem} from 'react-native-elements';
+import {View, StyleSheet, FlatList, TouchableOpacity, Text} from 'react-native';
+import {Button} from 'react-native-elements';
 import {Context as AuthContext} from '../context/AuthContext';
 import Spacer from '../common/Spacer';
 import tracker from '../api/tracker';
 
-const MainScreen = () => {
+const MainScreen = ({navigation}) => {
   const {signout} = useContext(AuthContext);
   const [data, setData] = useState([]);
+
+  const [comments, setComment] = useState([]);
 
   useEffect(() => {
     result();
@@ -24,15 +19,18 @@ const MainScreen = () => {
     tracker.get('/users').then((res) => setData(res.data));
   };
 
+  const handleClick = (id) => {
+    tracker.get('/comments').then((comments) => setComment(comments));
+    navigation.navigate('UserDetails', {comments, id});
+  };
+
   const renderItem = useCallback(
     ({item}) => (
-      <View style={styles.container}>
-        <TouchableOpacity>
-          <View>
-            <Text>{item.name}</Text>;
-          </View>
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity onPress={() => handleClick(item._id, item.comments)}>
+        <View style={styles.container}>
+          <Text style={styles.title}>{item.name}</Text>
+        </View>
+      </TouchableOpacity>
     ),
     [],
   );
@@ -53,7 +51,17 @@ const MainScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 15,
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: '#bababa',
+    borderRadius: 5,
+  },
+  title: {
+    fontSize: 18,
+    paddingLeft: 15,
   },
 });
 
