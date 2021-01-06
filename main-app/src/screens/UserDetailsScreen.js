@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 
-const UserDetailsScreen = ({route}) => {
+const UserDetailsScreen = ({navigation, route}) => {
   const {comments, id} = route.params;
 
   return (

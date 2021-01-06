@@ -9,31 +9,28 @@ const MainScreen = ({navigation}) => {
   const {signout} = useContext(AuthContext);
   const [data, setData] = useState([]);
 
-  const [comments, setComment] = useState([]);
-
   useEffect(() => {
     result();
-  });
+  }, []);
 
   const result = () => {
     tracker.get('/users').then((res) => setData(res.data));
   };
 
   const handleClick = (id) => {
-    tracker.get('/comments').then((comments) => setComment(comments));
-    navigation.navigate('UserDetails', {comments, id});
+    tracker.get('/comments').then((comments) => {
+      navigation.navigate('UserDetails', {comments, id});
+    });
   };
 
-  const renderItem = useCallback(
-    ({item}) => (
-      <TouchableOpacity onPress={() => handleClick(item._id, item.comments)}>
-        <View style={styles.container}>
-          <Text style={styles.title}>{item.name}</Text>
-        </View>
-      </TouchableOpacity>
-    ),
-    [],
+  const renderItem = ({item}) => (
+    <TouchableOpacity onPress={() => handleClick(item._id)}>
+      <View style={styles.container}>
+        <Text style={styles.title}>{item.name}</Text>
+      </View>
+    </TouchableOpacity>
   );
+
   return (
     <>
       <FlatList
