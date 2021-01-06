@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useEffect, useContext, useCallback} from 'react';
 import {View, StyleSheet, FlatList, TouchableOpacity, Text} from 'react-native';
 import {Button} from 'react-native-elements';
 import {Context as AuthContext} from '../context/AuthContext';
@@ -9,6 +9,8 @@ const MainScreen = ({navigation}) => {
   const {signout} = useContext(AuthContext);
   const [data, setData] = useState([]);
 
+  /*const [comments, setComments] = useState([]);*/
+
   useEffect(() => {
     result();
   }, []);
@@ -17,9 +19,20 @@ const MainScreen = ({navigation}) => {
     tracker.get('/users').then((res) => setData(res.data));
   };
 
-  const handleClick = async (id) => {
-    const comments = await tracker.get('/comments');
-    navigation.navigate('UserDetails', {comments, id});
+  const handleClick = (id) => {
+    debugger;
+    tracker
+      .get(`/comments?receiverId=${id}`, {
+        headers: {
+          "Authorization":
+            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmYwOGY5YTg5M2Q4ZTM4YTg1Y2Y3ZDkiLCJpYXQiOjE2MDk2MDc2OTl9.KSccDmjNPIBHtyh7GZMn1Rejlkh01V1V0ZwU-CeLygg',
+        },
+      })
+      .then((comments) => {
+        console.log(comments.data, 'comments');
+        navigation.navigate('UserDetails', {comments: comments.data});
+      })
+      .catch((e) => console.log(e));
   };
 
   const renderItem = ({item}) => (

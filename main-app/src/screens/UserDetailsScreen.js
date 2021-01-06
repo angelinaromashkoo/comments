@@ -1,15 +1,44 @@
-import React from 'react';
-import {View, StyleSheet, Text} from 'react-native';
+import React, {useCallback} from 'react';
+import {View, StyleSheet, Text, FlatList, TouchableOpacity} from 'react-native';
+import {Button} from 'react-native-elements';
+import Spacer from '../common/Spacer';
 
 const UserDetailsScreen = ({navigation, route}) => {
-  const {comments, id} = route.params;
+  const {comments} = route.params;
+
+  const renderItem = ({item}) => (
+    <View style={{flex: 1}}>
+      <TouchableOpacity>
+        <View style={{flex: 1}}>
+          <Text style={styles.title}>{item.comment}</Text>
+        </View>
+      </TouchableOpacity>
+    </View>
+  );
+
+  const onCreateComment = useCallback(() => {}, []);
+
+  const onAddComment = useCallback(() => {}, []);
 
   return (
-    <View style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
-      <Text>Details</Text>
-      <Text>itemId: {id}</Text>
-      <Text>comments: {comments}</Text>
-    </View>
+    <>
+      {comments.length ? (
+        <FlatList
+          data={comments}
+          keyExtractor={(item) => item._id}
+          renderItem={renderItem}
+        />
+      ) : (
+        <Text>No comments yet, please create them</Text>
+      )}
+
+      <Spacer>
+        <Button
+          title="Create comment"
+          onPress={comments.length ? onAddComment : onCreateComment}
+        />
+      </Spacer>
+    </>
   );
 };
 

@@ -1,15 +1,16 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import createDataContext from './createDataContext';
+import {SIGNIN, SIGNOUT, ADD_ERROR} from './types';
 import tracker from '../api/tracker';
 import * as NavigationService from '../navigationService/NavigationService';
 
 const authReducer = (state, action) => {
   switch (action.type) {
-    case 'add_error':
+    case ADD_ERROR:
       return {...state, errorMessage: action.payload};
-    case 'signin':
+    case SIGNIN:
       return {errorMessage: '', token: action.payload};
-    case 'signout':
+    case SIGNOUT:
       return {token: null, errorMessage: ''};
     default:
       return state;
@@ -20,11 +21,11 @@ const signup = (dispatch) => async ({name, email, password}) => {
   try {
     const response = await tracker.post('/signup', {name, email, password});
     await AsyncStorage.setItem('token', response.data.token);
-    dispatch({type: 'signin', payload: response.data.token});
+    dispatch({type: SIGNIN, payload: response.data.token});
     NavigationService.navigate('MainScreen');
   } catch (err) {
     dispatch({
-      type: 'add_error',
+      type: ADD_ERROR,
       payload: 'Something went wrong with sign up',
     });
   }
@@ -34,7 +35,7 @@ const signin = (dispatch) => async ({name, email, password}) => {
   try {
     const response = await tracker.post('/signin', {name, email, password});
     await AsyncStorage.setItem('token', response.data.token);
-    dispatch({type: 'signin', payload: response.data.token});
+    dispatch({type: SIGNIN, payload: response.data.token});
     NavigationService.navigate('MainScreen');
   } catch (err) {
     console.log(err);
@@ -47,7 +48,7 @@ const signin = (dispatch) => async ({name, email, password}) => {
 
 const signout = (dispatch) => async () => {
   await AsyncStorage.removeItem('token');
-  dispatch({type: 'signout'});
+  dispatch({type: SIGNOUT});
   NavigationService.navigate('SignIn');
 };
 

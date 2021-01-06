@@ -11,7 +11,7 @@ router.use(requireAuth);
 router.get('/comments', async(req,res) => {
     const {receiverId} = req.query;
     try {
-       await res.status(201).json({comment: await Comment.find({receiverId})})
+       await res.status(201).json(await Comment.find({receiverId}))
     } catch(err) {
         await res.status(err.status).json({error: true, message: 'Error get comments'})
     }
