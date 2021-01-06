@@ -17,10 +17,9 @@ const MainScreen = ({navigation}) => {
     tracker.get('/users').then((res) => setData(res.data));
   };
 
-  const handleClick = (id) => {
-    tracker.get('/comments').then((comments) => {
-      navigation.navigate('UserDetails', {comments, id});
-    });
+  const handleClick = async (id) => {
+    const comments = await tracker.get('/comments');
+    navigation.navigate('UserDetails', {comments, id});
   };
 
   const renderItem = ({item}) => (

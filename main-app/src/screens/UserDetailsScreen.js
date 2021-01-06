@@ -6,6 +6,7 @@ const UserDetailsScreen = ({navigation, route}) => {
 
   return (
     <View style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
+      <Text>Details</Text>
       <Text>itemId: {id}</Text>
       <Text>comments: {comments}</Text>
     </View>
