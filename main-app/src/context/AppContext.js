@@ -9,7 +9,11 @@ const authReducer = (state, action) => {
     case ADD_ERROR:
       return {...state, errorMessage: action.payload};
     case SIGNIN:
-      return {errorMessage: '', token: action.payload};
+      return {
+        errorMessage: '',
+        token: action.payload.token,
+        userId: action.payload.userId,
+      };
     case SIGNOUT:
       return {token: null, errorMessage: ''};
     default:
@@ -21,7 +25,7 @@ const signup = (dispatch) => async ({name, email, password}) => {
   try {
     const response = await tracker.post('/signup', {name, email, password});
     await AsyncStorage.setItem('token', response.data.token);
-    dispatch({type: SIGNIN, payload: response.data.token});
+    dispatch({type: SIGNIN, payload: response.data});
     NavigationService.navigate('MainScreen');
   } catch (err) {
     dispatch({
@@ -34,8 +38,10 @@ const signup = (dispatch) => async ({name, email, password}) => {
 const signin = (dispatch) => async ({name, email, password}) => {
   try {
     const response = await tracker.post('/signin', {name, email, password});
+
     await AsyncStorage.setItem('token', response.data.token);
-    dispatch({type: SIGNIN, payload: response.data.token});
+    /* await AsyncStorage.setItem('userId', response.data.userId);*/
+    dispatch({type: SIGNIN, payload: response.data});
     NavigationService.navigate('MainScreen');
   } catch (err) {
     console.log(err);
@@ -59,5 +65,9 @@ export const {Provider, Context} = createDataContext(
     signin,
     signout,
   },
-  {token: null, errorMessage: ''},
+  {
+    token: null,
+    userId: null,
+    errorMessage: '',
+  },
 );

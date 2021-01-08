@@ -3,7 +3,7 @@ import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import {Text} from 'react-native-elements';
 import Spacer from '../common/Spacer';
 import AuthForm from '../components/AuthForm';
-import {Context as AuthContext} from '../context/AuthContext';
+import {Context as AuthContext} from '../context/AppContext';
 import * as NavigationService from '../navigationService/NavigationService';
 
 const SigninScreen = () => {

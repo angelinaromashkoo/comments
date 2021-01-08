@@ -1,15 +1,13 @@
-import React, {useState, useEffect, useContext, useCallback} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {View, StyleSheet, FlatList, TouchableOpacity, Text} from 'react-native';
 import {Button} from 'react-native-elements';
-import {Context as AuthContext} from '../context/AuthContext';
+import {Context as AppContext} from '../context/AppContext';
 import Spacer from '../common/Spacer';
 import tracker from '../api/tracker';
 
 const MainScreen = ({navigation}) => {
-  const {signout} = useContext(AuthContext);
+  const {state, signout} = useContext(AppContext);
   const [data, setData] = useState([]);
-
-  /*const [comments, setComments] = useState([]);*/
 
   useEffect(() => {
     result();
@@ -20,12 +18,10 @@ const MainScreen = ({navigation}) => {
   };
 
   const handleClick = (id) => {
-    debugger;
     tracker
       .get(`/comments?receiverId=${id}`, {
         headers: {
-          "Authorization":
-            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmYwOGY5YTg5M2Q4ZTM4YTg1Y2Y3ZDkiLCJpYXQiOjE2MDk2MDc2OTl9.KSccDmjNPIBHtyh7GZMn1Rejlkh01V1V0ZwU-CeLygg',
+          Authorization: `Bearer ${state.token}`,
         },
       })
       .then((comments) => {
@@ -38,7 +34,11 @@ const MainScreen = ({navigation}) => {
   const renderItem = ({item}) => (
     <TouchableOpacity onPress={() => handleClick(item._id)}>
       <View style={styles.container}>
-        <Text style={styles.title}>{item.name}</Text>
+        {state.userId === item._id ? (
+          <Text style={styles.title}>My Profile</Text>
+        ) : (
+          <Text style={styles.title}>{item.name}</Text>
+        )}
       </View>
     </TouchableOpacity>
   );

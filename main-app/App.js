@@ -6,7 +6,7 @@ import SigninScreen from './src/screens/SigninScreen';
 import SignupScreen from './src/screens/SignupScreen';
 import MainScreen from './src/screens/MainScreen';
 import UserDetailsScreen from './src/screens/UserDetailsScreen';
-import {Provider as AuthProvider} from './src/context/AuthContext';
+import {Provider as AppProvider} from './src/context/AppContext';
 import {navigationRef} from './src/navigationService/NavigationService';
 import {isReadyRef} from './src/navigationService/NavigationService';
 
@@ -73,8 +73,8 @@ function App() {
 
 export default () => {
   return (
-    <AuthProvider>
+    <AppProvider>
       <App />
-    </AuthProvider>
+    </AppProvider>
   );
 };
