@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
-import {View, StyleSheet} from 'react-native';
-import {Text, Input, Button} from 'react-native-elements';
+import {View, StyleSheet, Button} from 'react-native';
+import {Text, Input} from 'react-native-elements';
 import Spacer from '../common/Spacer';
+import {THEME} from '../theme';
 
 const AuthForm = ({errorMessage, onSubmit, onSubmitButtonText}) => {
   const [name, setName] = useState('Lina');
@@ -34,6 +35,7 @@ const AuthForm = ({errorMessage, onSubmit, onSubmitButtonText}) => {
         <Button
           title={onSubmitButtonText}
           onPress={() => onSubmit({name, email, password})}
+          color={THEME.MAIN_COLOR}
         />
       </Spacer>
     </View>

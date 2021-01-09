@@ -17,7 +17,7 @@ router.get('/comments', async(req,res) => {
     }
 });
 
-router.post('/comments', async (req,res) => {
+router.post('/comments/create', async (req,res) => {
     const {senderId, receiverId, comment} = req.body;
     const commentRequest = new Comment({senderId, receiverId, comment});
 
@@ -33,14 +33,20 @@ router.post('/comments', async (req,res) => {
 });
 
 
-router.put('/comments/edit', (req,res) => {
+router.post('/comments/edit', function(req,res){
     const {id} = req.query;
+
+    //console.log(req.body, 'reqbody')
+    console.log(id, 'id')
+    console.log(res, 'RES')
+    console.log(req, 'REQ')
 
     Comment.findOneAndUpdate(
         {_id: id},
         {$set: req.body},
         { new: true},
         function(err, commentUpdate) {
+            console.log(commentUpdate);
             return res.send(commentUpdate);
         })
 });
@@ -50,6 +56,7 @@ router.delete('/comments/delete', (req, res) => {
 
     Comment.findOneAndDelete(
         {_id: id},
+        {useFindAndModify: false},
         function (err) {
             err ? res.status(422).send({error: 'Error'}) : res.status(201).json({message: 'Success'})
         })

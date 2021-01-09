@@ -1,9 +1,16 @@
 import React, {useState, useEffect, useContext} from 'react';
-import {View, StyleSheet, FlatList, TouchableOpacity, Text} from 'react-native';
-import {Button} from 'react-native-elements';
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+  Text,
+  Button,
+} from 'react-native';
 import {Context as AppContext} from '../context/AppContext';
 import Spacer from '../common/Spacer';
-import tracker from '../api/tracker';
+import {tracker} from '../api/tracker';
+import {THEME} from '../theme';
 
 const MainScreen = ({navigation}) => {
   const {state, signout} = useContext(AppContext);
@@ -26,7 +33,10 @@ const MainScreen = ({navigation}) => {
       })
       .then((comments) => {
         console.log(comments.data, 'comments');
-        navigation.navigate('UserDetails', {comments: comments.data});
+        navigation.navigate('UserDetails', {
+          comments: comments.data,
+          id,
+        });
       })
       .catch((e) => console.log(e));
   };
@@ -52,7 +62,7 @@ const MainScreen = ({navigation}) => {
       />
 
       <Spacer>
-        <Button title="Sign Out" onPress={signout} />
+        <Button title="Sign Out" onPress={signout} color={THEME.MAIN_COLOR} />
       </Spacer>
     </>
   );
