@@ -37,9 +37,9 @@ router.post('/comments/edit', function(req,res){
     const {id} = req.query;
 
     //console.log(req.body, 'reqbody')
-    console.log(id, 'id')
+   /* console.log(id, 'id')
     console.log(res, 'RES')
-    console.log(req, 'REQ')
+    console.log(req, 'REQ')*/
 
     Comment.findOneAndUpdate(
         {_id: id},
