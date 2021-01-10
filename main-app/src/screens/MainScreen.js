@@ -11,6 +11,7 @@ import {Context as AppContext} from '../context/AppContext';
 import Spacer from '../common/Spacer';
 import {tracker} from '../api/tracker';
 import {THEME} from '../theme';
+import {TextStyle, ViewStyle} from '../styles';
 
 const MainScreen = ({navigation}) => {
   const {state, signout} = useContext(AppContext);
@@ -35,7 +36,7 @@ const MainScreen = ({navigation}) => {
         console.log(comments.data, 'comments');
         navigation.navigate('UserDetails', {
           comments: comments.data,
-          id,
+          chosenUserId: id,
         });
       })
       .catch((e) => console.log(e));
@@ -44,11 +45,9 @@ const MainScreen = ({navigation}) => {
   const renderItem = ({item}) => (
     <TouchableOpacity onPress={() => handleClick(item._id)}>
       <View style={styles.container}>
-        {state.userId === item._id ? (
-          <Text style={styles.title}>My Profile</Text>
-        ) : (
-          <Text style={styles.title}>{item.name}</Text>
-        )}
+        <Text style={styles.userTitle}>
+          {state.userId === item._id ? 'My Profile' : item.name}
+        </Text>
       </View>
     </TouchableOpacity>
   );
@@ -69,19 +68,8 @@ const MainScreen = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 15,
-    marginBottom: 10,
-    borderWidth: 1,
-    borderColor: '#bababa',
-    borderRadius: 5,
-  },
-  title: {
-    fontSize: 18,
-    paddingLeft: 15,
-  },
+  container: ViewStyle.viewContainer,
+  userTitle: TextStyle.userTitle,
 });
 
 export default MainScreen;

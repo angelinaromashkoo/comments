@@ -1,5 +1,5 @@
 import axios from 'axios';
 
 export const tracker = axios.create({
-  baseURL: 'http://e2c3f893bf73.ngrok.io',
+  baseURL: 'http://ed3fc999e3dd.ngrok.io',
 });

@@ -6,99 +6,118 @@ import {
   Button,
   FlatList,
   TouchableOpacity,
-  Modal,
   Alert,
 } from 'react-native';
-import {Input} from 'react-native-elements';
 import {Context as AppContext} from '../context/AppContext';
 import Spacer from '../common/Spacer';
 import {tracker} from '../api/tracker';
 import {THEME} from '../theme';
+import {ModalInfoScreen} from '../common/ModalInfoScreen';
+import {ButtonsStyle, TextStyle, ViewStyle} from '../styles';
 
-const UserDetailsScreen = ({navigation, route}) => {
-  const {comments, id} = route.params;
+const UserDetailsScreen = ({route}) => {
+  const {comments, chosenUserId} = route.params;
   const {state} = useContext(AppContext);
-  const isCommentCreate = state.userId !== id;
+  const isCommentCreate = state.userId !== chosenUserId;
 
+  const [commentsData, setCommentsData] = useState(comments);
   const [isModalVisible, setModalVisible] = useState(false);
   const [editComment, setEditComment] = useState({});
   const [commentValue, setCommentValue] = useState('');
+  const [isCreate, setIsCreate] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const onRefreshComments = () => {
+    setIsRefreshing(true);
+    tracker
+      .get(`/comments?receiverId=${chosenUserId}`, {
+        headers: {
+          Authorization: `Bearer ${state.token}`,
+        },
+      })
+      .then((data) => setCommentsData(data.data))
+      .finally(() => setIsRefreshing(false));
+  };
+
+  const onEditPress = () => {
+    const {senderId, receiverId, _id} = editComment;
+
+    tracker
+      .post(
+        `/comments/edit?id=${_id}`,
+        {
+          senderId,
+          receiverId,
+          comment: commentValue,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${state.token}`,
+          },
+        },
+      )
+      .then((data) => data && toggleModal())
+      .catch((e) => console.log(e, 'ERORR'));
+  };
+
+  const deleteComment = (commentId) => {
+    tracker.delete(`/comments/delete?id=${commentId}`, {
+      headers: {
+        Authorization: `Bearer ${state.token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+  };
+
+  const onCreateComment = useCallback(() => {
+    tracker
+      .post(
+        '/comments/create',
+        {
+          senderId: state.userId,
+          receiverId: chosenUserId,
+          comment: commentValue,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${state.token}`,
+            'Content-Type': 'application/json',
+          },
+        },
+      )
+      .finally(() => {
+        setIsCreate(false);
+        toggleModal();
+      });
+  }, [state.userId, chosenUserId, commentValue]);
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
 
-  const onEditPress = () => {
-    const {senderId, receiverId} = editComment;
-
-    const body = {
-      senderId,
-      receiverId,
-      comment: commentValue,
-    };
-
-    tracker
-      .post(`/comments/edit?id=${id}`, body, {
-        headers: {
-          Authorization: `Bearer ${state.token}`,
-        },
-      })
-      .catch((e) => console.log(e, 'ERORR'))
-      .then((data) => data && toggleModal());
-  };
-
   const renderModal = () => {
     return (
-      <Modal animationType="slide" transparent={true} visible={isModalVisible}>
-        <View style={{flex: 1, backgroundColor: 'white'}}>
-          <View>
-            <Spacer />
-            <Input
-              value={commentValue}
-              onChangeText={(text) => setCommentValue(text)}
-            />
-          </View>
-          <View style={styles.buttons}>
-            <View style={styles.button}>
-              <Button
-                title="Done"
-                color={THEME.MAIN_COLOR}
-                onPress={onEditPress}
-              />
-            </View>
-            <View style={styles.button}>
-              <Button
-                title="Cancel"
-                color={THEME.DANGER_COLOR}
-                onPress={toggleModal}
-              />
-            </View>
-          </View>
-        </View>
-      </Modal>
+      <ModalInfoScreen
+        isModalVisible={isModalVisible}
+        inputValue={commentValue}
+        inputOnChangeText={(text) => setCommentValue(text)}
+        doneButtonPress={isCreate ? onCreateComment : onEditPress}
+        cancelButtonPress={() => {
+          toggleModal();
+          isCreate && setIsCreate(false);
+        }}
+      />
     );
   };
-  const deleteComment = () => {
-    tracker
-      .delete(`/comments/delete?id=${id}`, {
-        headers: {
-          Authorization: `Bearer ${state.token}`,
-          'Content-Type': 'application/json',
-        },
-      })
-      .then(() => console.log('Success'));
-  };
 
-  const onRemove = () => {
+  const renderRemoveAlert = (commentId) => {
     Alert.alert(
       'Delete a comment',
       'Are you sure you want to delete this comment?',
       [
         {
           text: 'Delete',
-          onPress: () => {
-            deleteComment();
-          },
+          onPress: () => deleteComment(commentId),
         },
         {
           text: 'Cancel',
@@ -115,7 +134,7 @@ const UserDetailsScreen = ({navigation, route}) => {
 
     return (
       <View style={{flex: 1}}>
-        <View style={styles.buttonContainer}>
+        <View style={styles.container}>
           <View>
             <Text style={styles.comment}>{item.comment}</Text>
           </View>
@@ -129,14 +148,14 @@ const UserDetailsScreen = ({navigation, route}) => {
                 }}>
                 <Text style={styles.edit}>Edit</Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => onRemove()}>
+              <TouchableOpacity onPress={() => renderRemoveAlert(item._id)}>
                 <Text style={styles.delete}>Delete</Text>
               </TouchableOpacity>
             </>
           )}
 
           {isUserProfile && (
-            <TouchableOpacity onPress={() => onRemove()}>
+            <TouchableOpacity onPress={() => renderRemoveAlert(item._id)}>
               <Text style={styles.delete}>Delete</Text>
             </TouchableOpacity>
           )}
@@ -145,20 +164,16 @@ const UserDetailsScreen = ({navigation, route}) => {
     );
   }, []);
 
-  const onCreateComment = useCallback(({senderId, receiverId, comment}) => {
-    tracker
-      .post('/comments/create', {senderId, receiverId, comment}, {})
-      .then();
-  }, []);
-
   return (
     <View style={{flex: 1}}>
       {isModalVisible && renderModal()}
-      {comments.length ? (
+      {comments?.length ? (
         <FlatList
-          data={comments}
+          data={commentsData}
           keyExtractor={(item) => item._id}
           renderItem={renderItem}
+          refreshing={isRefreshing}
+          onRefresh={onRefreshComments}
         />
       ) : (
         <Text style={styles.title}>No comments yet, please create them</Text>
@@ -169,7 +184,10 @@ const UserDetailsScreen = ({navigation, route}) => {
           <Button
             title="Create comment"
             color={THEME.MAIN_COLOR}
-            onPress={onCreateComment}
+            onPress={() => {
+              setIsCreate(true);
+              toggleModal();
+            }}
           />
         </Spacer>
       )}
@@ -178,47 +196,13 @@ const UserDetailsScreen = ({navigation, route}) => {
 };
 
 const styles = StyleSheet.create({
-  buttonContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: 15,
-    marginBottom: 10,
-    borderWidth: 1,
-    borderColor: '#bababa',
-    borderRadius: 5,
-  },
-  comment: {
-    fontSize: 18,
-    paddingLeft: 15,
-  },
-  title: {
-    fontSize: 18,
-    alignSelf: 'center',
-    marginTop: 10,
-  },
-  edit: {
-    fontSize: 18,
-    marginTop: 10,
-    color: 'blue',
-  },
-  delete: {
-    fontSize: 18,
-    marginTop: 10,
-    color: 'red',
-  },
-  button: {
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 5,
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  buttons: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-  },
+  container: ViewStyle.viewContainer,
+  comment: TextStyle.comment,
+  title: TextStyle.title,
+  edit: TextStyle.edit,
+  delete: TextStyle.deleteTitle,
+  button: ButtonsStyle.button,
+  buttons: ButtonsStyle.buttons,
 });
 
 export default UserDetailsScreen;

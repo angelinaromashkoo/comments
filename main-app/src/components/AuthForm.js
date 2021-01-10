@@ -3,6 +3,7 @@ import {View, StyleSheet, Button} from 'react-native';
 import {Text, Input} from 'react-native-elements';
 import Spacer from '../common/Spacer';
 import {THEME} from '../theme';
+import {TextStyle} from '../styles';
 
 const AuthForm = ({errorMessage, onSubmit, onSubmitButtonText}) => {
   const [name, setName] = useState('Lina');
@@ -43,12 +44,7 @@ const AuthForm = ({errorMessage, onSubmit, onSubmitButtonText}) => {
 };
 
 const styles = StyleSheet.create({
-  errorMessage: {
-    fontSize: 16,
-    color: 'red',
-    marginLeft: 15,
-    marginTop: 15,
-  },
+  errorMessage: TextStyle.errorText,
   container: {
     flex: 1,
   },

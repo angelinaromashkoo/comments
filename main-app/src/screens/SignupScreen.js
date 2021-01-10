@@ -5,6 +5,7 @@ import Spacer from '../common/Spacer';
 import {Context as AuthContext} from '../context/AppContext';
 import AuthForm from '../components/AuthForm';
 import * as NavigationService from '../navigationService/NavigationService';
+import {TextStyle, ViewStyle} from '../styles';
 
 const SignupScreen = () => {
   const {state, signup} = useContext(AuthContext);
@@ -31,15 +32,8 @@ const SignupScreen = () => {
   );
 };
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    marginBottom: 250,
-  },
-  link: {
-    color: 'blue',
-    marginBottom: 10,
-  },
+  container: ViewStyle.authContainer,
+  link: TextStyle.linkText,
 });
 
 export default SignupScreen;
