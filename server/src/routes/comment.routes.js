@@ -36,11 +36,6 @@ router.post('/comments/create', async (req,res) => {
 router.post('/comments/edit', function(req,res){
     const {id} = req.query;
 
-    //console.log(req.body, 'reqbody')
-   /* console.log(id, 'id')
-    console.log(res, 'RES')
-    console.log(req, 'REQ')*/
-
     Comment.findOneAndUpdate(
         {_id: id},
         {$set: req.body},
