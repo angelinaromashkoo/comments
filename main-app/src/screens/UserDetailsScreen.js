@@ -9,10 +9,10 @@ import {
   Alert,
 } from 'react-native';
 import {Context as AppContext} from '../context/AppContext';
-import Spacer from '../common/Spacer';
+import Spacer from '../components/Spacer';
 import {tracker} from '../api/tracker';
-import {THEME} from '../theme';
-import {ModalInfoScreen} from '../common/ModalInfoScreen';
+import {THEME} from '../styles/theme';
+import {ModalInfoScreen} from '../components/ModalInfoScreen';
 import {ButtonsStyle, TextStyle, ViewStyle} from '../styles';
 
 const UserDetailsScreen = ({route}) => {

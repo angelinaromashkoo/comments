@@ -2,7 +2,7 @@ import React, {memo} from 'react';
 import {Button, Modal, StyleSheet, View} from 'react-native';
 import Spacer from './Spacer';
 import {Input} from 'react-native-elements';
-import {THEME} from '../theme';
+import {THEME} from '../styles/theme';
 import {ButtonsStyle, ViewStyle} from '../styles';
 
 export const ModalInfoScreen = memo(

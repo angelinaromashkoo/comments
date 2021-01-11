@@ -8,9 +8,9 @@ import {
   Button,
 } from 'react-native';
 import {Context as AppContext} from '../context/AppContext';
-import Spacer from '../common/Spacer';
+import Spacer from '../components/Spacer';
 import {tracker} from '../api/tracker';
-import {THEME} from '../theme';
+import {THEME} from '../styles/theme';
 import {TextStyle, ViewStyle} from '../styles';
 
 const MainScreen = ({navigation}) => {

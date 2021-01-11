@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import {View, StyleSheet, Button} from 'react-native';
 import {Text, Input} from 'react-native-elements';
-import Spacer from '../common/Spacer';
-import {THEME} from '../theme';
+import Spacer from './Spacer';
+import {THEME} from '../styles/theme';
 import {TextStyle} from '../styles';
 
 const AuthForm = ({errorMessage, onSubmit, onSubmitButtonText}) => {
