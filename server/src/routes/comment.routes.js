@@ -41,7 +41,6 @@ router.post('/comments/edit', function(req,res){
         {$set: req.body},
         { new: true},
         function(err, commentUpdate) {
-            console.log(commentUpdate);
             return res.send(commentUpdate);
         })
 });
