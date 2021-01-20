@@ -8,3 +8,4 @@
 - `Express` 
 - `MongoDB` 
 - `Mongoose`
+- `JSON Web Token`
